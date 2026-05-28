@@ -21,11 +21,6 @@ public class Main {
                     "MonitorAgent",
                     null);
 
-            AgentController aluno = cc.createNewAgent(
-                    "aluno",
-                    "AlunoAgent",
-                    null);
-
             AgentController recommendation = cc.createNewAgent(
                     "recommendation",
                     "RecommendationAgent",
@@ -36,12 +31,28 @@ public class Main {
                     "TutorAgent",
                     null);
 
+            AgentController aluno1 = cc.createNewAgent(
+                    "aluno1",
+                    "AlunoAgent",
+                    new Object[] { "João" });
+
+            AgentController aluno2 = cc.createNewAgent(
+                    "aluno2",
+                    "AlunoAgent",
+                    new Object[] { "Maria" });
+
+            AgentController aluno3 = cc.createNewAgent(
+                    "aluno3",
+                    "AlunoAgent",
+                    new Object[] { "Carlos" });
+
             monitor.start();
-
-            aluno.start();
-
             recommendation.start();
             tutor.start();
+
+            aluno1.start();
+            aluno2.start();
+            aluno3.start();
 
             System.out.println(
                     "Sistema Multiagente iniciado!");

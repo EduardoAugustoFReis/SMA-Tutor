@@ -1,4 +1,5 @@
 import jade.core.Agent;
+import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -6,7 +7,8 @@ public class MonitorAgent extends Agent {
 
     protected void setup() {
 
-        System.out.println("MonitorAgent iniciado!");
+        System.out.println(
+                "MonitorAgent iniciado!");
 
         addBehaviour(new CyclicBehaviour() {
 
@@ -17,29 +19,50 @@ public class MonitorAgent extends Agent {
 
                 if (msg != null) {
 
+                    String conteudo = msg.getContent();
+
                     System.out.println(
                             "Monitor recebeu: "
-                                    + msg.getContent());
+                                    + conteudo);
 
-                    if (msg.getContent().contains("4")) {
+                    String[] dados = conteudo.split("\\|");
+
+                    String nome = dados[0];
+
+                    String disciplina = dados[1];
+
+                    int nota = Integer.parseInt(
+                            dados[2]);
+
+                    if (nota < 5) {
 
                         System.out.println(
-                                "Dificuldade detectada em Matemática!");
+                                "Dificuldade detectada para "
+                                        + nome);
 
-                        ACLMessage novaMsg = new ACLMessage(ACLMessage.INFORM);
+                        ACLMessage novaMsg = new ACLMessage(
+                                ACLMessage.INFORM);
 
                         novaMsg.addReceiver(
-                                new jade.core.AID(
+                                new AID(
                                         "recommendation",
-                                        jade.core.AID.ISLOCALNAME));
+                                        AID.ISLOCALNAME));
 
                         novaMsg.setContent(
-                                "Aluno precisa de reforço");
+                                nome
+                                        + "|"
+                                        + disciplina);
 
                         send(novaMsg);
 
                         System.out.println(
                                 "Solicitação enviada ao RecommendationAgent");
+
+                    } else {
+
+                        System.out.println(
+                                nome
+                                        + " possui desempenho satisfatório.");
                     }
 
                 } else {

@@ -7,7 +7,8 @@ public class RecommendationAgent extends Agent {
 
   protected void setup() {
 
-    System.out.println("RecommendationAgent iniciado!");
+    System.out.println(
+        "RecommendationAgent iniciado!");
 
     addBehaviour(new CyclicBehaviour() {
 
@@ -18,22 +19,36 @@ public class RecommendationAgent extends Agent {
 
         if (msg != null) {
 
+          String conteudo = msg.getContent();
+
           System.out.println(
               "Recommendation recebeu: "
-                  + msg.getContent());
+                  + conteudo);
 
-          ACLMessage resposta = new ACLMessage(ACLMessage.INFORM);
+          String[] dados = conteudo.split("\\|");
+
+          String nome = dados[0];
+
+          String disciplina = dados[1];
+
+          ACLMessage resposta = new ACLMessage(
+              ACLMessage.INFORM);
 
           resposta.addReceiver(
-              new AID("tutor", AID.ISLOCALNAME));
+              new AID(
+                  "tutor",
+                  AID.ISLOCALNAME));
 
           resposta.setContent(
-              "Recomendar vídeo de álgebra");
+              nome
+                  + "|Reforço em "
+                  + disciplina);
 
           send(resposta);
 
           System.out.println(
-              "Conteúdo recomendado!");
+              "Conteúdo recomendado para "
+                  + nome);
 
         } else {
 
@@ -42,4 +57,4 @@ public class RecommendationAgent extends Agent {
       }
     });
   }
-}
+} 
