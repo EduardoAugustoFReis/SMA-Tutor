@@ -7,9 +7,6 @@ public class TutorAgent extends Agent {
 
   protected void setup() {
 
-    System.out.println(
-        "TutorAgent iniciado!");
-
     addBehaviour(new CyclicBehaviour() {
 
       @Override
@@ -19,44 +16,48 @@ public class TutorAgent extends Agent {
 
         if (msg != null) {
 
-          String conteudo = msg.getContent();
-
-          System.out.println(
-              "Tutor recebeu: "
-                  + conteudo);
-
-          String[] dados = conteudo.split("\\|");
+          String[] dados = msg.getContent()
+              .split("\\|");
 
           String nome = dados[0];
 
           String recomendacao = dados[1];
 
           System.out.println(
-              "Conteúdo validado!");
+              "Tutor validou conteúdo para "
+                  + nome);
 
           ACLMessage resposta = new ACLMessage(
               ACLMessage.INFORM);
 
-          resposta.addReceiver(
-              new AID(
-                  "aluno1",
-                  AID.ISLOCALNAME));
+          String agenteDestino = "";
+
+          switch (nome) {
+
+            case "João":
+              agenteDestino = "aluno0";
+              break;
+
+            case "Maria":
+              agenteDestino = "aluno1";
+              break;
+
+            case "Carlos":
+              agenteDestino = "aluno2";
+              break;
+
+            case "Ana":
+              agenteDestino = "aluno3";
+              break;
+          }
 
           resposta.addReceiver(
               new AID(
-                  "aluno2",
-                  AID.ISLOCALNAME));
-
-          resposta.addReceiver(
-              new AID(
-                  "aluno3",
+                  agenteDestino,
                   AID.ISLOCALNAME));
 
           resposta.setContent(
-              "Nova recomendação para "
-                  + nome
-                  + ": "
-                  + recomendacao);
+              recomendacao);
 
           send(resposta);
 

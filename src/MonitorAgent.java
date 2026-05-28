@@ -5,71 +5,56 @@ import jade.lang.acl.ACLMessage;
 
 public class MonitorAgent extends Agent {
 
-    protected void setup() {
+        protected void setup() {
 
-        System.out.println(
-                "MonitorAgent iniciado!");
+                addBehaviour(new CyclicBehaviour() {
 
-        addBehaviour(new CyclicBehaviour() {
+                        @Override
+                        public void action() {
 
-            @Override
-            public void action() {
+                                ACLMessage msg = receive();
 
-                ACLMessage msg = receive();
+                                if (msg != null) {
 
-                if (msg != null) {
+                                        String[] dados = msg.getContent()
+                                                        .split("\\|");
 
-                    String conteudo = msg.getContent();
+                                        String nome = dados[0];
 
-                    System.out.println(
-                            "Monitor recebeu: "
-                                    + conteudo);
+                                        String disciplina = dados[1];
 
-                    String[] dados = conteudo.split("\\|");
+                                        int nota = Integer.parseInt(
+                                                        dados[2]);
 
-                    String nome = dados[0];
+                                        if (nota < 5) {
 
-                    String disciplina = dados[1];
+                                                System.out.println(
+                                                                "\nMonitor detectou dificuldade para "
+                                                                                + nome
+                                                                                + " em "
+                                                                                + disciplina);
 
-                    int nota = Integer.parseInt(
-                            dados[2]);
+                                                ACLMessage novaMsg = new ACLMessage(
+                                                                ACLMessage.INFORM);
 
-                    if (nota < 5) {
+                                                novaMsg.addReceiver(
+                                                                new AID(
+                                                                                "recommendation",
+                                                                                AID.ISLOCALNAME));
 
-                        System.out.println(
-                                "Dificuldade detectada para "
-                                        + nome);
+                                                novaMsg.setContent(
+                                                                nome
+                                                                                + "|"
+                                                                                + disciplina);
 
-                        ACLMessage novaMsg = new ACLMessage(
-                                ACLMessage.INFORM);
+                                                send(novaMsg);
+                                        }
 
-                        novaMsg.addReceiver(
-                                new AID(
-                                        "recommendation",
-                                        AID.ISLOCALNAME));
+                                } else {
 
-                        novaMsg.setContent(
-                                nome
-                                        + "|"
-                                        + disciplina);
-
-                        send(novaMsg);
-
-                        System.out.println(
-                                "Solicitação enviada ao RecommendationAgent");
-
-                    } else {
-
-                        System.out.println(
-                                nome
-                                        + " possui desempenho satisfatório.");
-                    }
-
-                } else {
-
-                    block();
-                }
-            }
-        });
-    }
+                                        block();
+                                }
+                        }
+                });
+        }
 }

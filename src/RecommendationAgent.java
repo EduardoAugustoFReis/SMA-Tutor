@@ -7,9 +7,6 @@ public class RecommendationAgent extends Agent {
 
   protected void setup() {
 
-    System.out.println(
-        "RecommendationAgent iniciado!");
-
     addBehaviour(new CyclicBehaviour() {
 
       @Override
@@ -19,17 +16,19 @@ public class RecommendationAgent extends Agent {
 
         if (msg != null) {
 
-          String conteudo = msg.getContent();
-
-          System.out.println(
-              "Recommendation recebeu: "
-                  + conteudo);
-
-          String[] dados = conteudo.split("\\|");
+          String[] dados = msg.getContent()
+              .split("\\|");
 
           String nome = dados[0];
 
           String disciplina = dados[1];
+
+          String recomendacao = gerarRecomendacao(
+              disciplina);
+
+          System.out.println(
+              "RecommendationAgent recomendou: "
+                  + recomendacao);
 
           ACLMessage resposta = new ACLMessage(
               ACLMessage.INFORM);
@@ -41,14 +40,10 @@ public class RecommendationAgent extends Agent {
 
           resposta.setContent(
               nome
-                  + "|Reforço em "
-                  + disciplina);
+                  + "|"
+                  + recomendacao);
 
           send(resposta);
-
-          System.out.println(
-              "Conteúdo recomendado para "
-                  + nome);
 
         } else {
 
@@ -57,4 +52,29 @@ public class RecommendationAgent extends Agent {
       }
     });
   }
-} 
+
+  private String gerarRecomendacao(
+      String disciplina) {
+
+    switch (disciplina) {
+
+      case "Matemática":
+        return "Vídeo de álgebra básica";
+
+      case "Português":
+        return "Exercícios de interpretação textual";
+
+      case "Física":
+        return "Lista de exercícios de cinemática";
+
+      case "Química":
+        return "Revisão sobre tabela periódica";
+
+      case "História":
+        return "Resumo sobre Brasil Colônia";
+
+      default:
+        return "Material de reforço";
+    }
+  }
+}

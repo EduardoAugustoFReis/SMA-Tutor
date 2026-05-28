@@ -6,60 +6,58 @@ import jade.wrapper.ContainerController;
 
 public class Main {
 
-    public static void main(String[] args) {
+        public static void main(String[] args) {
 
-        try {
+                try {
 
-            Runtime rt = Runtime.instance();
+                        Runtime rt = Runtime.instance();
 
-            Profile p = new ProfileImpl();
+                        Profile p = new ProfileImpl();
 
-            ContainerController cc = rt.createMainContainer(p);
+                        ContainerController cc = rt.createMainContainer(p);
 
-            AgentController monitor = cc.createNewAgent(
-                    "monitor",
-                    "MonitorAgent",
-                    null);
+                        AgentController monitor = cc.createNewAgent(
+                                        "monitor",
+                                        "MonitorAgent",
+                                        null);
 
-            AgentController recommendation = cc.createNewAgent(
-                    "recommendation",
-                    "RecommendationAgent",
-                    null);
+                        AgentController recommendation = cc.createNewAgent(
+                                        "recommendation",
+                                        "RecommendationAgent",
+                                        null);
 
-            AgentController tutor = cc.createNewAgent(
-                    "tutor",
-                    "TutorAgent",
-                    null);
+                        AgentController tutor = cc.createNewAgent(
+                                        "tutor",
+                                        "TutorAgent",
+                                        null);
 
-            AgentController aluno1 = cc.createNewAgent(
-                    "aluno1",
-                    "AlunoAgent",
-                    new Object[] { "João" });
+                        String[] alunos = {
+                                        "João",
+                                        "Maria",
+                                        "Carlos",
+                                        "Ana"
+                        };
 
-            AgentController aluno2 = cc.createNewAgent(
-                    "aluno2",
-                    "AlunoAgent",
-                    new Object[] { "Maria" });
+                        for (int i = 0; i < alunos.length; i++) {
 
-            AgentController aluno3 = cc.createNewAgent(
-                    "aluno3",
-                    "AlunoAgent",
-                    new Object[] { "Carlos" });
+                                AgentController aluno = cc.createNewAgent(
+                                                "aluno" + i,
+                                                "AlunoAgent",
+                                                new Object[] { alunos[i] });
 
-            monitor.start();
-            recommendation.start();
-            tutor.start();
+                                aluno.start();
+                        }
 
-            aluno1.start();
-            aluno2.start();
-            aluno3.start();
+                        monitor.start();
+                        recommendation.start();
+                        tutor.start();
 
-            System.out.println(
-                    "Sistema Multiagente iniciado!");
+                        System.out.println(
+                                        "\nSistema Multiagente iniciado!\n");
 
-        } catch (Exception e) {
+                } catch (Exception e) {
 
-            e.printStackTrace();
+                        e.printStackTrace();
+                }
         }
-    }
 }
