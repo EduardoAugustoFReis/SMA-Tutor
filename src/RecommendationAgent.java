@@ -23,8 +23,11 @@ public class RecommendationAgent extends Agent {
 
           String disciplina = dados[1];
 
+          String nivel = dados[2];
+
           String recomendacao = gerarRecomendacao(
-              disciplina);
+              disciplina,
+              nivel);
 
           System.out.println(
               "RecommendationAgent recomendou: "
@@ -54,27 +57,54 @@ public class RecommendationAgent extends Agent {
   }
 
   private String gerarRecomendacao(
-      String disciplina) {
+      String disciplina,
+      String nivel) {
 
-    switch (disciplina) {
+    if (nivel.equals("GRAVE")) {
 
-      case "Matemática":
-        return "Vídeo de álgebra básica";
+      switch (disciplina) {
 
-      case "Português":
-        return "Exercícios de interpretação textual";
+        case "Matemática":
+          return "Curso básico de álgebra";
 
-      case "Física":
-        return "Lista de exercícios de cinemática";
+        case "Português":
+          return "Reforço completo de interpretação textual";
 
-      case "Química":
-        return "Revisão sobre tabela periódica";
+        case "Física":
+          return "Curso introdutório de cinemática";
 
-      case "História":
-        return "Resumo sobre Brasil Colônia";
+        case "Química":
+          return "Revisão completa de tabela periódica";
 
-      default:
-        return "Material de reforço";
+        case "História":
+          return "Aulas de reforço sobre Brasil Colônia";
+
+        default:
+          return "Reforço intensivo";
+      }
+
+    } else {
+
+      switch (disciplina) {
+
+        case "Matemática":
+          return "Lista de exercícios de álgebra";
+
+        case "Português":
+          return "Exercícios de interpretação textual";
+
+        case "Física":
+          return "Lista de exercícios de cinemática";
+
+        case "Química":
+          return "Resumo sobre tabela periódica";
+
+        case "História":
+          return "Mapa mental de História";
+
+        default:
+          return "Material complementar";
+      }
     }
   }
 }

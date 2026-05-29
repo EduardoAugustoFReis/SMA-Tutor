@@ -16,8 +16,7 @@ public class MonitorAgent extends Agent {
 
                                 if (msg != null) {
 
-                                        String[] dados = msg.getContent()
-                                                        .split("\\|");
+                                        String[] dados = msg.getContent().split("\\|");
 
                                         String nome = dados[0];
 
@@ -26,13 +25,33 @@ public class MonitorAgent extends Agent {
                                         int nota = Integer.parseInt(
                                                         dados[2]);
 
-                                        if (nota < 5) {
+                                        String nivel = "";
+
+                                        if (nota <= 3) {
+
+                                                nivel = "GRAVE";
+
+                                        } else if (nota <= 5) {
+
+                                                nivel = "MODERADA";
+
+                                        }
+
+                                        if (!nivel.isEmpty()) {
+
+                                                String area = obterArea(
+                                                                disciplina);
 
                                                 System.out.println(
-                                                                "\nMonitor detectou dificuldade para "
+                                                                "\nMonitor detectou dificuldade "
+                                                                                + nivel
+                                                                                + " para "
                                                                                 + nome
                                                                                 + " em "
-                                                                                + disciplina);
+                                                                                + disciplina
+                                                                                + " ("
+                                                                                + area
+                                                                                + ")");
 
                                                 ACLMessage novaMsg = new ACLMessage(
                                                                 ACLMessage.INFORM);
@@ -45,7 +64,9 @@ public class MonitorAgent extends Agent {
                                                 novaMsg.setContent(
                                                                 nome
                                                                                 + "|"
-                                                                                + disciplina);
+                                                                                + disciplina
+                                                                                + "|"
+                                                                                + nivel);
 
                                                 send(novaMsg);
                                         }
@@ -56,5 +77,20 @@ public class MonitorAgent extends Agent {
                                 }
                         }
                 });
+        }
+
+        private String obterArea(
+                        String disciplina) {
+
+                switch (disciplina) {
+
+                        case "Matemática":
+                        case "Física":
+                        case "Química":
+                                return "Exatas";
+
+                        default:
+                                return "Humanas";
+                }
         }
 }
